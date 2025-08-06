@@ -1,0 +1,48 @@
+@charset "utf-8";
+
+@media screen and (max-width:1200px){
+    .inner {max-width: 100%; padding: 0 20px; box-sizing: border-box}  
+    .story .inner .contents h2 {font-size: 40px}
+    
+}
+
+@media screen and (max-width:800px){
+    .wrap {overflow: hidden}
+
+    header .inner {display: block; position: relative; }
+    header .gnb {overflow: hidden; height: 0}
+    header .gnb ul {display: block; padding: 40px 0 0}
+    header .gnb li {margin:0 0 30px;}
+    header .gnb li a {font-size: 16px; }
+    header .gnb li a.btn {width: 100%; text-align: center; padding: 12px 0}
+    header .open {display: block; position: absolute; top: 0px; right: 20px}
+    header .open svg {width: 25px}
+    header .open svg:nth-child(2) {display: none}
+    
+    /* ! 설명_12: [ 스크립트 9 ] 작성 ! */
+    /* header.on */
+    header.on .open svg:nth-child(1) {display: none}
+    header.on .open svg:nth-child(2) {display: block}
+    header.on .gnb {height: auto}
+    
+    .intro .introVideoBox .text {font-size: 10vw}
+    .intro .introVideoBox .arrow {width: 50px; height: 50px;}
+    .intro .introVideoBox .btnBox .btn {font-size: 14px}
+    .intro .introTextBox .text {font-size:  7vw}
+    .story .inner {display: block}
+    .story .inner .contents {width: 100%}
+    .story .inner .contents h2 {position: static; margin-bottom: 20px; font-size: 7vw}
+    .story .inner .contents p {position: static}
+    .story .inner .card {max-width: 100%; margin-top: 30px}
+    .story .inner .card > ul > li {padding: 30px}
+    .story .inner .card > ul > li h3 {font-size: 6vw }
+    .story.a .inner .card > ul > li:nth-child(2) {height: auto}
+    .story.a .inner .card > ul > li:nth-child(2) svg {width: 40px}
+    .story.a .inner .card > ul > li:nth-child(2) p {font-size: 12vw}  
+    .story.b .inner .card {width: 100%}
+    .story.c img {width: 50%}
+    .story.c .text {font-size: 8vw; font-weight: 700}
+    .story.d .text {font-size: 8vw; font-weight: 700}
+ 
+    
+}

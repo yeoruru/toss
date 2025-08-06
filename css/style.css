@@ -1,0 +1,133 @@
+@charset "utf-8";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* 폰트 - https://fonts.google.com/selection/embed */
+
+/* 00. Reset */
+* {margin: 0;padding: 0;}
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, tbody, tfoot, thead, tr, th, td{margin:0;padding:0;}
+a {color: inherit; text-decoration: inherit;}
+li {list-style: none;}
+address, em, i {font-style: normal;}
+button {background: none; border: none;}
+img {vertical-align: middle;}
+
+
+/* 01. Layout */
+body {font-family: "Noto Sans KR", sans-serif; color: #fff; font-size: 16px; letter-spacing: -1px; background: #000;}
+.wrap {position: relative; margin: 0 auto;}
+/* 스크롤로 항시 확인이 필요하기 때문에 마진 보톰 1000px 정도 주고 작업 / .story .inner .contents h2 에 position: sticky; 속성을 사용할 예정으로 오버플로우 히든 절대 X  */
+.inner {max-width: 1140px ; margin: 0 auto} /* 레이아웃 가이드 라인을 1140px 로 잡았음 */
+.btn {border-radius: 40px; padding: 5px 12px;font-weight: 600; display: inline-block} /* .btn 공통 디자인 */
+
+/* ! 설명_1: 글씨가 화이트라서 헤더가 안 보이니까 보면서 작업 할 수 있도록 section.intro 까지 html 작성 후 css 작성 시작 ! */
+/* 02. header */
+header {position: fixed; width: 100%; top:0; left: 0; z-index: 100; padding: 15px 0; background-color: rgba(0, 29, 58, 0.18) !important; backdrop-filter: blur(10px); z-index: 100;}
+header .inner {display: flex; justify-content: space-between}
+header .logo {display: block; width: 100px}
+header .logo img {width: 100%}
+header .gnb ul {display: flex; justify-content: space-between}
+header .gnb li {margin: 0 15px}
+header .gnb li a {font-size: 14px; font-weight: 600; line-height: 20px; padding: 0 8px}
+header .gnb li a.btn {background-color: rgba(222,222,255,0.2); padding: 6px 14px;font-size: 13px; }
+header .open {display: none}
+
+/* 03. intro */
+/* intro - 비디오 박스 */
+.intro .introVideoBox {position: relative;} /* height: 150vh; -> 비디오박스 안에 video, .text, ,btnBox 모두 전부 높이 100vh로 포지션으로 포개어져 있어서 높이가 짧으므로 애니 메이션 시간을 좀 더 길게 주기위해 높이 150vh 로 줌 /  z-index: 2 -> 밑에 인트로 텍스트 박스도 포개어질꺼라서 위로 올려준다 */
+.intro .introVideoBox video{width: 100%; height: 100vh;  object-fit: cover;} /* object-fit: cover; -> https://developer.mozilla.org/ko/docs/Web/CSS/object-fit */
+.intro .introVideoBox .text {width: 100%; height: 100vh;position: absolute; left: 0; top: 0; font-size: 80px; font-weight: 900; display: flex; text-align: center; flex-direction: column; justify-content: center; }
+.intro .introVideoBox .arrow {width: 100px;  height: 100px; position: absolute;  top: 88vh; left: 50%; transform: translateX(-50%);}
+.intro .introVideoBox .arrow img {width: 100%; animation: arrow linear 1.5s 0s infinite}
+@keyframes arrow {
+	 0% {opacity: 1;}
+   30% {opacity: 0; transform: translateY(50px) scale(0.95);}
+   60% {opacity: 0; transform: translateY(50px) scale(0.95);}
+	 100% {opacity: 1; margin-top: 0px;}
+}
+.intro .introVideoBox .btnBox {width: 100%; height: 100vh; position: absolute; left: 0; top: 0;}
+.intro .introVideoBox .btnBox .btn {background: #fff; color: #191f28; font-weight: 500; position: absolute; left: 50%; top: 54%; transform: translate(-50%,-50%); opacity: 0;} /* 스크롤트리거로 opacity와 top으로 서서히 올라오는 효과 줄것임 */
+.intro .introVideoBox .btnBox .btn svg {height: 13px; width: 13px; margin-right: 2px}
+
+/* intro - 텍스트 박스 */
+.intro .introTextBox {width: 100%; height: 100vh; position: relative; text-align: center;display: flex; text-align: center; flex-direction: column; justify-content: center; } /* z-index: 1; -> 인트로 비디오 박스보다 레이어 밑으로 내려준다 */
+.intro .introTextBox .text {font-weight: 900; font-size: 54px; line-height: 1.4; margin-bottom: 20px;} 
+.intro .introTextBox .text.active {opacity: 1}
+
+/* ! 설명_2: 여기까지 css 작성하면 캡처_1 상태임. 이제 gsap 간단 설명 후 script.js [ 스크립트 1 ] ~ [ 스크립트 2 ] 작성 시작 ! */
+
+/* 04. story - 공통 */
+.story {margin-top: 50vh} /* 파랑으로 배경 바꿔줄 시간을 위해 마진탑 적용 */
+.story .inner {display: flex; justify-content: space-between; position: relative}
+.story .inner .contents {width:40%;}
+.story .inner .contents h2 {font-size: 50px; font-weight: 900; line-height: 1.3; position: sticky; top: 15%} /* sticky 를 주려면 .wrap이나 body 등등 부모요소가 오버플로우 히든이 있으면 안됨*/
+.story .inner .contents p {position: sticky; top: 33%}
+.story .inner .card {max-width: 450px; margin-top: 200px} /* contents 글씨보다 늦게 나타나도록 밑으로 좀 내려준다 */
+.story .inner .card > ul > li {width: 100%; height: 600px; padding: 40px; box-sizing: border-box; border-radius: 25px; margin-bottom: 35px}
+.story .inner .card > ul > li h3 {font-size: 34px; margin-bottom: 20px;font-weight: 700; line-height: 1.3;}
+.story .inner .card > ul > li p {font-weight: 600}
+
+/* story - story.a */
+.story.a .inner .card > ul > li:nth-child(1) {background: url(../images/story_a_1.png) no-repeat center/cover; display: flex; flex-direction: column; justify-content:flex-end}
+.story.a .inner .card > ul > li:nth-child(1) p {color:#b0b8c1;}
+.story.a .inner .card > ul > li:nth-child(2) {background: #CCE314; color: #104b2f; height: 360px; display: flex; flex-direction: column; justify-content: center; align-items: center;}
+.story.a .inner .card > ul > li:nth-child(2) svg {width: 64px;}
+.story.a .inner .card > ul > li:nth-child(2) svg path {fill: #104b2f}
+.story.a .inner .card > ul > li:nth-child(2) h3 {font-size: 22px; margin-top: 10px}
+.story.a .inner .card > ul > li:nth-child(2) p {font-size: 65px; font-weight: 800}
+.story.a .inner .card > ul > li:nth-child(3) {background: url(../images/story_a_2.png) no-repeat center/cover; color: #191f28}
+.story.a .inner .card > ul > li:nth-child(3) p {color: #333d4b}
+.story.a .inner .card > ul > li:nth-child(4) {background: url(../images/story_a_3.png) no-repeat center/cover}
+.story.a .inner .card > ul > li:nth-child(4) .btn {background: #f2f4f6; color: #545e6d; font-size: 18px; padding: 16px 28px;}
+.story.a .inner .card > ul > li:nth-child(5) {background: #194aa6; display: flex; flex-direction: column;}
+.story.a .inner .card > ul > li:nth-child(5) li {font-size: 30px; font-weight: 700; margin-bottom: 6px}
+.story.a .inner .card > ul > li:nth-child(5) .btn {background: #fff; color: #194aa6; font-size: 18px; width: 120px; text-align: center; margin-top: auto;}
+
+/* ! 설명_4: 여기까지 css 작성하면 캡처_2 상태임. 이제 [ 스크립트 3 ], [ 스크립트 4 ] 작성 시작 ! */
+
+/* story - story.b */
+.story.b .inner .card { width: 450px; height: 100vh}
+.story.b .inner .card > ul {position: relative; width: 100%; height: 100%}
+.story.b .inner .card > ul > li {position: absolute; height: 500px; display: flex; flex-direction: column;}
+.story.b .inner .card > ul > li svg {width: 48px; margin-bottom: 20px; }
+.story.b .inner .card > ul > li p {font-size: 20px; font-weight: 700}
+.story.b .inner .card > ul > li span {font-size: 24px; font-weight: 700; margin-top: auto;}
+.story.b .inner .card > ul > li:nth-child(1) {top: 140px; z-index: 5; background: url(../images/story_b_1.png) no-repeat center/cover; }
+.story.b .inner .card > ul > li:nth-child(2) {top: 170px;  z-index: 4; transform: scale(0.97); background: #57148A}
+.story.b .inner .card > ul > li:nth-child(2) {color: #E7BFE9}
+.story.b .inner .card > ul > li:nth-child(2) path  {fill: #E7BFE9} 
+.story.b .inner .card > ul > li:nth-child(3) {top: 210px;  z-index: 3; transform: scale(0.94); background: #CCE316}
+.story.b .inner .card > ul > li:nth-child(3) {color: #114B2F}
+.story.b .inner .card > ul > li:nth-child(3) path  {fill: #114B2F} 
+.story.b .inner .card > ul > li:nth-child(4) {top: 240px;  z-index: 2; transform: scale(0.91); background: #7A0017}
+.story.b .inner .card > ul > li:nth-child(4) {color: #FFCFCC}
+.story.b .inner .card > ul > li:nth-child(4) path  {fill: #FFCFCC} 
+.story.b .inner .card > ul > li:nth-child(5) {top: 270px;  z-index: 1; transform: scale(0.88); background: #FFCFCC;}
+.story.b .inner .card > ul > li:nth-child(5) {color: #7A0017}
+.story.b .inner .card > ul > li:nth-child(5) path  {fill: #7A0017} 
+.story.b .inner .card > ul > li:nth-child(6) {top: 300px;  z-index: 0; transform: scale(0.88); background: #00C8F0;}
+.story.b .inner .card > ul > li:nth-child(6) {color: #002761}
+.story.b .inner .card > ul > li:nth-child(6) path  {fill: #002761} 
+
+/* ! 설명_6: 여기까지 css 작성하면 캡처_3 상태임. 이제 [ 스크립트 5 ], [ 스크립트 6 ] 작성 시작 ! */
+
+/* story - story.c */
+.story.c {width: 100%; height: 100vh;background: url(../images/story_c_1.jpg) no-repeat center/cover; position: relative;} 
+.story.c img {width: 400px;position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);}
+.story.c .textBox {position: absolute;width: 100%; left: 50%; top: 50%; transform: translate(-50%,-50%);}
+.story.c .text {font-size: 70px; color: #333d4b; line-height: 1.4;font-weight: 800; text-align: center; opacity: 0}
+
+/* ! 설명_8: 여기까지 css 작성하면 캡처_4 상태임. 이제 [ 스크립트 7 ] 작성 시작 ! */
+
+/* story - story.d */
+.story.d {width: 100%; height: 100vh; margin-top: 0;background: #17171c;}
+.story.d .textBox {width: 100%; height: 90vh; background: #fff;display: flex; text-align: center; flex-direction: column; justify-content: center;}
+.story.d .text {font-size: 70px; color: #333d4b; line-height: 1.4;font-weight: 800; text-align: center}
+
+/* footer */
+footer {width: 100%; height: 10vh; background: #f9fafb; position: relative;display: flex; text-align: center; flex-direction: column; justify-content: center;}
+footer p {color: #333d4b; font-weight: 600}
+
+/* ! 설명_10: 이제 [ 스크립트 8 ] 작성 시작 ! */
+
+
